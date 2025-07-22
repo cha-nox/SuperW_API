@@ -2,13 +2,13 @@
 FROM node:alpine
 
 # Defining the working directory
-WORKDIR /dist
+WORKDIR /src
 
 # Copying the application itself into the container
 COPY . .
 
 # Opening the port required by the application
-EXPOSE 2012
+EXPOSE 5000
 
 # Application's health check
 HEALTHCHECK --interval=1m --timeout=3s --retries=3 \

@@ -1,0 +1,51 @@
+services:
+  mysql:
+    image: mysql:latest
+    restart: unless-stopped
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: super_w
+      MYSQL_USER: super_w
+      MYSQL_ALLOW_EMPTY_PASSWORD: false
+      MYSQL_PASSWORD: Adminer1
+      MYSQL_ROOT_PASSWORD: Adminer1
+    healthcheck:
+      test: ['CMD', 'mysqladmin' ,'ping', '-h', 'localhost']
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - super_w_data:/var/lib/mysql:rw
+    networks:
+      - super_w
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_PORT: 3306
+      PMA_HOST: mysql
+      PMA_USER: super_w
+      PMA_PASSWORD: Adminer1
+    ports:
+      - 8080:80
+    networks:
+      - super_w
+
+volumes:
+  super_w_data:
+    name: super_w_data
+  mailpit_data:
+    name: mailpit_data
+
+networks:
+  super_w:
+    name: super_w
+    driver: bridge
