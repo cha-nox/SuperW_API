@@ -1,10 +1,11 @@
-import express  from 'express';
-import helmet   from 'helmet';
-import cors     from 'cors';
-import morgan   from 'morgan';
+import express      from 'express';
+import helmet       from 'helmet';
+import cors         from 'cors';
+import morgan       from 'morgan';
+import authRoutes   from './routes/auth.js';
 
 // Clearing cache
-clearAllCache();
+// clearAllCache();
 
 // App initialisation
 const port = 5000;
@@ -20,6 +21,7 @@ const app = express()
 
     // Routes
     //.use('/w', wRoutes)
+    .use('/', authRoutes)
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
