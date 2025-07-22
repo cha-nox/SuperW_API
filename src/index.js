@@ -4,9 +4,6 @@ import cors         from 'cors';
 import morgan       from 'morgan';
 import authRoutes   from './routes/auth.js';
 
-// Clearing cache
-// clearAllCache();
-
 // App initialisation
 const port = 5000;
 const app = express()
