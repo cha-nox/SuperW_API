@@ -3,6 +3,7 @@ import express          from 'express';
 import helmet           from 'helmet';
 import morgan           from 'morgan';
 import authRoutes       from './routes/auth.js';
+import csrfRoutes       from './routes/csrf.js';
 import productRoutes    from './routes/product.js';
 
 // App initialisation
@@ -19,6 +20,7 @@ const app = express()
 
     // Routes
     .use('/', authRoutes)
+    .use('/csrf', csrfRoutes)
     .use('/product', productRoutes)
 
     // Starting the server
