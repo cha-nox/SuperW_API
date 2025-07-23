@@ -68,5 +68,22 @@ const productList = async (req, res, next) => {
 };
 router.get('/list', productList);
 
+// Product details route
+const productDetails = async (req, res, next) => {
+    const product_details = await prisma.product.findUniqueOrThrow({
+        where: {id: parseInt(req.body.id)}
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.status(500).json({error: "Erreur lors de la récupération des détails du produit."});
+    });
+
+    return res.status(200).json({
+        message:        "Détails du produit",
+        data_content:   product_details
+    });
+};
+router.get('/details', productDetails);
+
 // Exporting the routes
 export default router;
