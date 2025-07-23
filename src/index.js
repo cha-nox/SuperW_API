@@ -15,7 +15,7 @@ const app = express()
     .use(helmet.contentSecurityPolicy())
     .use(helmet.hidePoweredBy())
     .use(express.urlencoded({extended: true}))
-    .use(morgan(":date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]"))
+    .use(morgan(':date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]'))
 
     // Routes
     .use('/', authRoutes)
