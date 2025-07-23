@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 // Product deletion route
 const productDelete = async (req, res, next) => {
-    const new_product = await prisma.product.delete({
+    const deleted_product = await prisma.product.delete({
         where: {id: parseInt(req.body.id)}
     })
     .catch((error) => {
