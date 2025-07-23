@@ -4,6 +4,20 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
+// Product deletion route
+const productDelete = async (req, res, next) => {
+    const new_product = await prisma.product.delete({
+        where: {id: parseInt(req.body.id)}
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.status(500).json({ error: "Erreur lors de la suppression du produit." });
+    });
+
+    res.status(200).json({message: "Produit supprimé avec succès !"});
+};
+router.delete('/delete', productDelete);
+
 // Product creation route
 const productCreate = async (req, res, next) => {
     const new_product = await prisma.product.create({
@@ -13,6 +27,10 @@ const productCreate = async (req, res, next) => {
             category:       req.body.category,
             price:          parseInt(req.body.price)
         }
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.status(500).json({error: "Erreur lors de la création du produit."});
     });
 
     res.status(201).json({message: "Produit créé avec succès !"});
