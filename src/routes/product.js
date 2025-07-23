@@ -4,6 +4,26 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
+// Product update route
+const productUpdate = async (req, res, next) => {
+    const updated_product = await prisma.product.update({
+        data: {
+            name:           req.body.name,
+            description:    req.body.description,
+            category:       req.body.category,
+            price:          parseInt(req.body.price)
+        },
+        where: {id: parseInt(req.body.id)}
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.status(500).json({error: "Erreur lors de la modification du produit."});
+    });
+
+    return res.status(200).json({message: "Produit mis à jour avec succès !"});
+};
+router.patch('/update', productUpdate);
+
 // Product deletion route
 const productDelete = async (req, res, next) => {
     const deleted_product = await prisma.product.delete({
@@ -11,10 +31,10 @@ const productDelete = async (req, res, next) => {
     })
     .catch((error) => {
         console.error(error);
-        return res.status(500).json({ error: "Erreur lors de la suppression du produit." });
+        return res.status(500).json({error: "Erreur lors de la suppression du produit."});
     });
 
-    res.status(200).json({message: "Produit supprimé avec succès !"});
+    return res.status(200).json({message: "Produit supprimé avec succès !"});
 };
 router.delete('/delete', productDelete);
 
@@ -33,15 +53,15 @@ const productCreate = async (req, res, next) => {
         return res.status(500).json({error: "Erreur lors de la création du produit."});
     });
 
-    res.status(201).json({message: "Produit créé avec succès !"});
+    return res.status(201).json({message: "Produit créé avec succès !"});
 };
-router.post('/new', productCreate);
+router.put('/new', productCreate);
 
 // Product list route
 const productList = async (req, res, next) => {
     const product_list = await prisma.product.findMany();
 
-    res.status(200).json({
+    return res.status(200).json({
         message:        "Liste des produits",
         data_content:   product_list
     });
