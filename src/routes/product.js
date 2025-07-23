@@ -1,5 +1,6 @@
-import { Router }       from 'express';
-import { PrismaClient } from '@prisma/client';
+import { Router }           from 'express';
+import { PrismaClient }     from '@prisma/client';
+import authenticateToken    from '../middlewares/authenticateToken.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -22,7 +23,7 @@ const productUpdate = async (req, res, next) => {
 
     return res.status(200).json({message: "Produit mis à jour avec succès !"});
 };
-router.patch('/update', productUpdate);
+router.patch('/update', authenticateToken, productUpdate);
 
 // Product deletion route
 const productDelete = async (req, res, next) => {
@@ -36,7 +37,7 @@ const productDelete = async (req, res, next) => {
 
     return res.status(200).json({message: "Produit supprimé avec succès !"});
 };
-router.delete('/delete', productDelete);
+router.delete('/delete', authenticateToken, productDelete);
 
 // Product creation route
 const productCreate = async (req, res, next) => {
@@ -55,7 +56,7 @@ const productCreate = async (req, res, next) => {
 
     return res.status(201).json({message: "Produit créé avec succès !"});
 };
-router.put('/new', productCreate);
+router.put('/new', authenticateToken, productCreate);
 
 // Product list route
 const productList = async (req, res, next) => {
@@ -66,7 +67,7 @@ const productList = async (req, res, next) => {
         data_content:   product_list
     });
 };
-router.get('/list', productList);
+router.get('/list', authenticateToken, productList);
 
 // Product details route
 const productDetails = async (req, res, next) => {
@@ -83,7 +84,7 @@ const productDetails = async (req, res, next) => {
         data_content:   product_details
     });
 };
-router.get('/details', productDetails);
+router.get('/details', authenticateToken, productDetails);
 
 // Exporting the routes
 export default router;
