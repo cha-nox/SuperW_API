@@ -1,8 +1,9 @@
-import express      from 'express';
-import helmet       from 'helmet';
-import cors         from 'cors';
-import morgan       from 'morgan';
-import authRoutes   from './routes/auth.js';
+import express          from 'express';
+import helmet           from 'helmet';
+import cors             from 'cors';
+import morgan           from 'morgan';
+import authRoutes       from './routes/auth.js';
+import productRoutes    from './routes/product.js';
 
 // App initialisation
 const port = 5000;
@@ -17,8 +18,8 @@ const app = express()
     .use(morgan(":date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]"))
 
     // Routes
-    //.use('/w', wRoutes)
     .use('/', authRoutes)
+    .use('/product', productRoutes)
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
