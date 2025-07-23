@@ -1,6 +1,6 @@
+import cors             from 'cors';
 import express          from 'express';
 import helmet           from 'helmet';
-import cors             from 'cors';
 import morgan           from 'morgan';
 import authRoutes       from './routes/auth.js';
 import productRoutes    from './routes/product.js';
