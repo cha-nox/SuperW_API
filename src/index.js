@@ -17,7 +17,7 @@ const app   = express()
     // Settings
     .use(cors({
         origin: 'http://localhost:3000',
-        exposedHeaders: ['X-CSRF-token'] 
+        exposedHeaders: ['X-CSRF-token']
     }))
     .use(express.json())
     .use(helmet())
