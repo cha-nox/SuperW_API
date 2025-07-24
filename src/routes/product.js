@@ -43,7 +43,8 @@ router.delete('/delete', authenticateToken, verifyCsrfToken, productDelete);
 
 // Product creation route
 const productCreate = async (req, res, next) => {
-    const imagePaths    = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+    const images        = req.files;
+    const imagePaths    = images.map(file => `http://localhost:5000/uploads/${file.filename}`);
     const new_product   = await prisma.product.create({
         data: {
             name:           req.body.name,
