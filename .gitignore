@@ -4,3 +4,4 @@ node_modules/
 old.*
 dist/
 /src/generated/prisma
+uploads/

@@ -1,6 +1,7 @@
 import { Router }           from 'express';
 import { PrismaClient }     from '@prisma/client';
 import authenticateToken    from '../middlewares/authenticateToken.js';
+import { upload }           from '../middlewares/imageManagement.js';
 import { verifyCsrfToken }  from '../middlewares/csrfToken.js';
 
 const router = Router();
@@ -42,11 +43,13 @@ router.delete('/delete', authenticateToken, verifyCsrfToken, productDelete);
 
 // Product creation route
 const productCreate = async (req, res, next) => {
-    const new_product = await prisma.product.create({
+    const imagePaths    = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+    const new_product   = await prisma.product.create({
         data: {
             name:           req.body.name,
             description:    req.body.description,
             category:       req.body.category,
+            images:         imagePaths,
             price:          parseInt(req.body.price)
         }
     })
@@ -57,7 +60,7 @@ const productCreate = async (req, res, next) => {
 
     return res.status(201).json({message: "Produit créé avec succès !"});
 };
-router.put('/new', authenticateToken, verifyCsrfToken, productCreate);
+router.put('/new', authenticateToken, verifyCsrfToken, upload.array('images', 5), productCreate);
 
 // Product list route
 const productList = async (req, res, next) => {

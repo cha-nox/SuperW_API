@@ -4,8 +4,12 @@ import helmet           from 'helmet';
 import morgan           from 'morgan';
 import authRoutes       from './routes/auth.js';
 import csrfRoutes       from './routes/csrf.js';
+import fs               from 'fs';
 import productRoutes    from './routes/product.js';
 import statsRoutes      from './routes/stats.js';
+
+// Creating the uploads folder if it doesn't exist yet
+if(!fs.existsSync('uploads')){fs.mkdirSync('uploads');};
 
 // App initialisation
 const port  = 5000;
@@ -20,6 +24,7 @@ const app   = express()
     .use(helmet.contentSecurityPolicy())
     .use(helmet.hidePoweredBy())
     .use(express.urlencoded({extended: true}))
+    .use('/uploads', express.static('uploads'))
     .use(morgan(':date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]'))
 
     // Routes
