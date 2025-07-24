@@ -3,13 +3,14 @@ import jwt  from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import authenticateToken from '../middlewares/authenticateToken.js';
+import { validateAuth } from '../middlewares/validators.js';
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // Routes
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", validateAuth, async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -37,7 +38,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", validateAuth, async (req, res) => {
     const { email, password } = req.body;
 
     try {
