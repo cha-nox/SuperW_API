@@ -25,7 +25,7 @@ const productUpdate = async (req, res, next) => {
 
     return res.status(200).json({message: "Produit mis à jour avec succès !"});
 };
-router.patch('/update', authenticateToken, verifyCsrfToken, productUpdate);
+router.patch('/update', authenticateToken, verifyCsrfToken, upload.array('images', 5), productUpdate);
 
 // Product deletion route
 const productDelete = async (req, res, next) => {
@@ -44,15 +44,16 @@ router.delete('/delete', authenticateToken, verifyCsrfToken, productDelete);
 // Product creation route
 const productCreate = async (req, res, next) => {
     const images        = req.files;
-    const imagePaths    = images.map(file => `http://localhost:5000/uploads/${file.filename}`);
+    const imagePaths    = images.map(file => ({url: `http://localhost:5000/uploads/${file.filename}`}));
     const new_product   = await prisma.product.create({
         data: {
             name:           req.body.name,
             description:    req.body.description,
             category:       req.body.category,
-            images:         imagePaths,
+            images:         {create: imagePaths},
             price:          parseInt(req.body.price)
-        }
+        },
+        include: {images: true}
     })
     .catch((error) => {
         console.error(error);
@@ -65,7 +66,7 @@ router.put('/new', authenticateToken, verifyCsrfToken, upload.array('images', 5)
 
 // Product list route
 const productList = async (req, res, next) => {
-    const product_list = await prisma.product.findMany();
+    const product_list = await prisma.product.findMany({include: {images: true}});
 
     return res.status(200).json({
         message:        "Liste des produits",
@@ -77,7 +78,8 @@ router.get('/list', productList);
 // Product details route
 const productDetails = async (req, res, next) => {
     const product_details = await prisma.product.findUniqueOrThrow({
-        where: {id: parseInt(req.body.id)}
+        where:      {id: parseInt(req.query.id)},
+        include:    {images: true}
     })
     .catch((error) => {
         console.error(error);
@@ -91,5 +93,4 @@ const productDetails = async (req, res, next) => {
 };
 router.get('/details', productDetails);
 
-// Exporting the routes
 export default router;

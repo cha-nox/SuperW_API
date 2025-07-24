@@ -20,7 +20,7 @@ const app   = express()
         exposedHeaders: ['X-CSRF-token']
     }))
     .use(express.json())
-    .use(helmet())
+    .use(helmet({crossOriginResourcePolicy: {policy: "cross-origin"}}))
     .use(helmet.contentSecurityPolicy())
     .use(helmet.hidePoweredBy())
     .use(express.urlencoded({extended: true}))
