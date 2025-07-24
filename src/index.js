@@ -7,10 +7,13 @@ import csrfRoutes       from './routes/csrf.js';
 import productRoutes    from './routes/product.js';
 
 // App initialisation
-const port = 5000;
-const app = express()
+const port  = 5000;
+const app   = express()
     // Settings
-    .use(cors({origin: 'http://localhost:3000'}))
+    .use(cors({
+        origin: 'http://localhost:3000',
+        exposedHeaders: ['X-CSRF-token'] 
+    }))
     .use(express.json())
     .use(helmet())
     .use(helmet.contentSecurityPolicy())
