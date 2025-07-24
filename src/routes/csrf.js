@@ -4,7 +4,7 @@ import { generateCsrfToken }    from '../middlewares/csrfToken.js';
 const router = Router();
 
 // CSRF token generation route
-router.post('/generate_token', generateCsrfToken, (req, res) => {
+router.get('/generate_token', generateCsrfToken, (req, res) => {
     return res.status(200).json({message: "CSRF token generated successfully !"});
 });
 
