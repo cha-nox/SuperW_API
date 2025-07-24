@@ -68,7 +68,7 @@ const productList = async (req, res, next) => {
         data_content:   product_list
     });
 };
-router.get('/list', authenticateToken, productList);
+router.get('/list', productList);
 
 // Product details route
 const productDetails = async (req, res, next) => {
@@ -85,7 +85,7 @@ const productDetails = async (req, res, next) => {
         data_content:   product_details
     });
 };
-router.get('/details', authenticateToken, productDetails);
+router.get('/details', productDetails);
 
 // Exporting the routes
 export default router;
