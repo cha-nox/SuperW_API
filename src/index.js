@@ -5,6 +5,7 @@ import morgan           from 'morgan';
 import authRoutes       from './routes/auth.js';
 import csrfRoutes       from './routes/csrf.js';
 import productRoutes    from './routes/product.js';
+import statsRoutes      from './routes/stats.js';
 
 // App initialisation
 const port = 5000;
@@ -22,6 +23,7 @@ const app = express()
     .use('/', authRoutes)
     .use('/csrf', csrfRoutes)
     .use('/product', productRoutes)
+    .use('/stats', statsRoutes)
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
