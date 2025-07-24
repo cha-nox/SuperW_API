@@ -10,11 +10,11 @@ export const generateCsrfToken = (req, res, next) => {
 
 export const verifyCsrfToken = (req, res, next) => {
     if(
-        !req.headers['X-CSRF-token'] ||
-        !tokens.includes(req.headers['X-CSRF-token'])
+        !req.headers['x-csrf-token'] ||
+        !tokens.includes(req.headers['x-csrf-token'])
     ){
         return res.status(419).json({error: "Invalid CSRF token."});
     };
-    tokens = tokens.filter(t => t !== req.headers['X-CSRF-token']);
+    tokens = tokens.filter(t => t !== req.headers['x-csrf-token']);
     next();
 };
