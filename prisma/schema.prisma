@@ -16,15 +16,16 @@ datasource db {
 model User {
   id          Int       @id @default(autoincrement())
   email       String    @unique
-  password    String
+  password    String?
   createdAt   DateTime  @default(now())
 }
 
 model Product {
   id          Int       @id @default(autoincrement())
   name        String    @unique
-  description String
-  category    String
-  price       Int
+  description String?
+  category    String?
+  image       String?
+  price       Int?
   createdAt   DateTime  @default(now())
 }
