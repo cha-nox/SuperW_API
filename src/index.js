@@ -6,6 +6,7 @@ import csrfRoutes       from './routes/csrf.js';
 import fs               from 'fs';
 import productRoutes    from './routes/product.js';
 import statsRoutes      from './routes/stats.js';
+import cspRoute         from './routes/csp.js';
 
 // Creating the uploads folder if it doesn't exist yet
 if(!fs.existsSync('uploads')){fs.mkdirSync('uploads');};
@@ -28,6 +29,7 @@ const app   = express()
     .use('/csrf', csrfRoutes)
     .use('/product', productRoutes)
     .use('/stats', statsRoutes)
+    .use('/csp-report', cspRoute)
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
