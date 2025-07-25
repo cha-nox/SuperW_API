@@ -7,6 +7,7 @@ import csrfRoutes       from './routes/csrf.js';
 import fs               from 'fs';
 import productRoutes    from './routes/product.js';
 import statsRoutes      from './routes/stats.js';
+import cspRoute         from './routes/csp.js';
 
 // Creating the uploads folder if it doesn't exist yet
 if(!fs.existsSync('uploads')){fs.mkdirSync('uploads');};
@@ -20,9 +21,32 @@ const app   = express()
         exposedHeaders: ['X-CSRF-token']
     }))
     .use(express.json())
-    .use(helmet({crossOriginResourcePolicy: {policy: "cross-origin"}}))
-    .use(helmet.contentSecurityPolicy())
+    .use(helmet({
+        crossOriginResourcePolicy: {policy: "cross-origin"},
+        contentSecurityPolicy: {
+            directives: {
+                "script-src": ["'self'", ""],
+                "style-src": null,
+                "img-src": ["'self'", "localhost:3000"],
+                "report-uri": "http://localhost:5000/csp-report"
+            },
+            reportOnly: true
+        },
+    }))
     .use(helmet.hidePoweredBy())
+    .use((req, res, next) => {
+        res.setHeader("Report-To", JSON.stringify({
+            group: "csp-endpoint",
+            max_age: 10886400,
+            endpoints: [{ url: "/csp-report" }]
+        }));
+        res.setHeader("NEL", JSON.stringify({
+            report_to: "csp-endpoint",
+            max_age: 10886400,
+            include_subdomains: true
+        }));
+        next();
+    })
     .use(express.urlencoded({extended: true}))
     .use('/uploads', express.static('uploads'))
     .use(morgan(':date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]'))
@@ -32,6 +56,7 @@ const app   = express()
     .use('/csrf', csrfRoutes)
     .use('/product', productRoutes)
     .use('/stats', statsRoutes)
+    .use('/csp-report', cspRoute)
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
