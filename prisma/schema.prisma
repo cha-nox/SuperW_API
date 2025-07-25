@@ -34,5 +34,5 @@ model Images {
   id          Int       @id @default(autoincrement())
   url         String    @unique
   productId   Int
-  product     Product   @relation(fields: [productId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

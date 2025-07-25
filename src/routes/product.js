@@ -29,15 +29,37 @@ router.patch('/update', authenticateToken, verifyCsrfToken, upload.array('images
 
 // Product deletion route
 const productDelete = async (req, res, next) => {
-    const deleted_product = await prisma.product.delete({
-        where: {id: parseInt(req.body.id)}
-    })
-    .catch((error) => {
-        console.error(error);
-        return res.status(500).json({error: "Erreur lors de la suppression du produit."});
-    });
+    const {id} = req.body;
 
-    return res.status(200).json({message: "Produit supprimé avec succès !"});
+    if(!id){return res.status(400).json({error: "ID manquant."});};
+    try{
+        // Getting all images associated with the product
+        const images = await prisma.images.findMany({
+            where: {productId: parseInt(id)}}
+        );
+
+        // Deleting images from the uploads directory
+        for(const image of images){
+            const imagePath = path.join('uploads', path.basename(image.url));
+            try{
+                await fs.unlink(imagePath);
+            }
+            catch(error){
+                console.warn(`Erreur suppression fichier : ${imagePath}`, error.message);
+            };
+        };
+
+        // Deleting the product and its associated images from the database
+        await prisma.product.delete({
+            where: {id: parseInt(id)}
+        });
+
+        return res.status(200).json({message: "Produit et images associées supprimés avec succès."});
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json({error: "Erreur lors de la suppression du produit et/ou de ses images associées."});
+    };
 };
 router.delete('/delete', authenticateToken, verifyCsrfToken, productDelete);
 
