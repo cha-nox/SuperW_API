@@ -1,12 +1,18 @@
-import cors             from 'cors';
-import express          from 'express';
-import helmet           from 'helmet';
-import morgan           from 'morgan';
-import authRoutes       from './routes/auth.js';
-import csrfRoutes       from './routes/csrf.js';
-import fs               from 'fs';
-import productRoutes    from './routes/product.js';
-import statsRoutes      from './routes/stats.js';
+import express              from 'express';
+import helmet               from 'helmet';
+import morgan               from 'morgan';
+import cors                 from 'cors';
+import fs                   from 'fs';
+import path, { dirname }    from 'path';
+import { fileURLToPath }    from 'url';
+
+import authRoutes           from './routes/auth.js';
+import csrfRoutes           from './routes/csrf.js';
+import productRoutes        from './routes/product.js';
+import statsRoutes          from './routes/stats.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Creating the uploads folder if it doesn't exist yet
 if(!fs.existsSync('uploads')){fs.mkdirSync('uploads');};
@@ -32,6 +38,7 @@ const app   = express()
     .use('/csrf', csrfRoutes)
     .use('/product', productRoutes)
     .use('/stats', statsRoutes)
+    .use('/.well-known', express.static(path.join(__dirname, '.well-known')))
 
     // Starting the server
     .listen(port, () => {console.log(`Server listening on port ${port}.`);})
