@@ -1,6 +1,5 @@
 import cors             from 'cors';
 import express          from 'express';
-import helmet           from 'helmet';
 import morgan           from 'morgan';
 import authRoutes       from './routes/auth.js';
 import csrfRoutes       from './routes/csrf.js';
@@ -20,9 +19,6 @@ const app   = express()
         exposedHeaders: ['X-CSRF-token']
     }))
     .use(express.json())
-    .use(helmet({crossOriginResourcePolicy: {policy: "cross-origin"}}))
-    .use(helmet.contentSecurityPolicy())
-    .use(helmet.hidePoweredBy())
     .use(express.urlencoded({extended: true}))
     .use('/uploads', express.static('uploads'))
     .use(morgan(':date \: :remote-addr - :method :url | :status | :response-time ms | :res[content-length]'))

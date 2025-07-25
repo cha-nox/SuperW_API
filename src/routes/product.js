@@ -3,6 +3,8 @@ import { PrismaClient }     from '@prisma/client';
 import authenticateToken    from '../middlewares/authenticateToken.js';
 import { upload }           from '../middlewares/imageManagement.js';
 import { verifyCsrfToken }  from '../middlewares/csrfToken.js';
+import fs from 'fs/promises';
+import path from 'path';
 
 const router = Router();
 const prisma = new PrismaClient();
